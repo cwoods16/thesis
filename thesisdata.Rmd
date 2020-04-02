@@ -1,0 +1,25 @@
+---
+title: "Mental Accounting in College: Students and 'Free Money'"
+author: "Connor Woods"
+date: "April 2, 2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE, cache=TRUE, 
+                      fig.width=7, fig.height=3, fig.align = "center")
+library(readr)
+library(dplyr)
+library(ggplot2)
+```
+
+Importing FLEX data:
+
+```{r}
+
+flex_data <- read_csv("flex_data.csv") 
+head(flex_data)
+
+ggplot(flex_data, aes(x=Date, y=Price)) + geom_point()
+```
+
