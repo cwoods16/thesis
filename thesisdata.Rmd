@@ -14,7 +14,6 @@ library(ggplot2)
 library(lubridate)
 ```
 
-Importing FLEX data:
 *Spring Semester Dates*
 Campus Open: 1/20/19, Start: 1/22/19, End: 5/8/19, Campus Closed: 5/20/19
 
@@ -32,8 +31,17 @@ spring <- flex_data %>% filter(Time <= '2019-5-20') %>% mutate(Week = Week-2)
 fall <- flex_data %>% filter(Time >= '2019-8-31') %>% mutate (Week = Week-34)
 spring_and_fall <- full_join(spring, fall)
 
+#Transactions by week
 ggplot(spring_and_fall) + geom_bar(aes(x=Week))
 ggplot(spring) + geom_bar(aes(x=Week))
 ggplot(fall) + geom_bar(aes(x=Week))
+```
+
+```{r}
+#Purchases by week
+fall %>% group_by(Week) %>% summarize(Total = sum(Price))
+spring %>% group_by(Week) %>% summarize(Total = sum(Price))
+spring_and_fall %>% group_by(Week) %>% summarize(Total = sum(Price))
+
 ```
 
