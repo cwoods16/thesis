@@ -11,15 +11,29 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE, cache=TRUE,
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(lubridate)
 ```
 
 Importing FLEX data:
+*Spring Semester Dates*
+Campus Open: 1/20/19, Start: 1/22/19, End: 5/8/19, Campus Closed: 5/20/19
+
+*Fall Semester Dates*
+Campus Open: 8/31/19 Start: 9/3/19, End: 12/11/19, Campus Closed: 12/21/19
 
 ```{r}
 
 flex_data <- read_csv("flex_data.csv") 
-head(flex_data)
+flex_data <- flex_data %>% mutate(Time = mdy_hm(Time)) %>% mutate(Week = week(Time))
 
-ggplot(flex_data, aes(x=Date, y=Price)) + geom_point()
+flex_data <-flex_data %>% filter(Time >= '2019-01-20' & Time <= '2019-12-19') %>%  filter(Price > 0)
+
+spring <- flex_data %>% filter(Time <= '2019-5-20') %>% mutate(Week = Week-2)
+fall <- flex_data %>% filter(Time >= '2019-8-31') %>% mutate (Week = Week-34)
+spring_and_fall <- full_join(spring, fall)
+
+ggplot(spring_and_fall) + geom_bar(aes(x=Week))
+ggplot(spring) + geom_bar(aes(x=Week))
+ggplot(fall) + geom_bar(aes(x=Week))
 ```
 
