@@ -23,25 +23,50 @@ Campus Open: 8/31/19 Start: 9/3/19, End: 12/11/19, Campus Closed: 12/21/19
 ```{r}
 
 flex_data <- read_csv("flex_data.csv") 
-flex_data <- flex_data %>% mutate(Time = mdy_hm(Time)) %>% mutate(Week = week(Time))
+flex_data <- flex_data %>% mutate(Time = mdy_hm(Time)) %>% mutate(Week = epiweek(Time)) %>% rename(AmountSpent=Price)
+flex_data <- flex_data %>% filter(Time >= '2019-01-20' & Time <= '2019-12-19') %>%  filter(AmountSpent > 0)
 
-flex_data <-flex_data %>% filter(Time >= '2019-01-20' & Time <= '2019-12-19') %>%  filter(Price > 0)
+```
 
-spring <- flex_data %>% filter(Time <= '2019-5-20') %>% mutate(Week = Week-2)
-fall <- flex_data %>% filter(Time >= '2019-8-31') %>% mutate (Week = Week-34)
-spring_and_fall <- full_join(spring, fall)
 
+```{r}
 #Transactions by week
-ggplot(spring_and_fall) + geom_bar(aes(x=Week))
-ggplot(spring) + geom_bar(aes(x=Week))
-ggplot(fall) + geom_bar(aes(x=Week))
+springtrans <- flex_data %>% filter(Time <= '2019-5-19') %>% mutate(Week = Week-3) %>% filter(Week!=1 & Week!=9 & Week!=10 & Week!=17)
+falltrans <- flex_data %>% filter(Time >= '2019-9-1') %>% mutate (Week = Week-35) %>% filter(Week!=1 & Week!=8 & Week!=13 & Week!=16)
+
+ggplot(springtrans) + geom_bar(aes(x=Week))
+ggplot(falltrans) + geom_bar(aes(x=Week))
 ```
 
 ```{r}
 #Purchases by week
-fall %>% group_by(Week) %>% summarize(Total = sum(Price))
-spring %>% group_by(Week) %>% summarize(Total = sum(Price))
-spring_and_fall %>% group_by(Week) %>% summarize(Total = sum(Price))
+springpurch <- springtrans %>% group_by(Week) %>% summarize(TotalPurch = sum(AmountSpent))
+fallpurch <- falltrans %>% group_by(Week) %>% summarize(TotalPurch = sum(AmountSpent))
+
+ggplot(springpurch) + geom_bar(aes(x=Week, y=TotalPurch), stat='identity')
+ggplot(fallpurch) + geom_bar(aes(x=Week, y=TotalPurch), stat='identity')
+```
+
+
+```{r}
+#Amount Spent Per Transaction
+springppt <- springtrans %>% group_by(Week) %>% summarize(TotalTrans = sum(as.double(Week)), TotalPurch = sum(AmountSpent)) %>% mutate(PPT = TotalPurch/TotalTrans)
+fallppt <- falltrans %>% group_by(Week) %>% summarize(TotalTrans = sum(as.double(Week)), TotalPurch = sum(AmountSpent)) %>% mutate(PPT = TotalPurch/TotalTrans)
+
+ggplot(springppt) + geom_bar(aes(x=Week, y=PPT), stat='identity')
+ggplot(fallppt) + geom_bar(aes(x=Week, y=PPT), stat='identity')
+```
+
+```{r}
+#Creation of null dataframes
+sprnullconsistent <- data.frame("Week"=1:17, "Transactions"= c(0,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,0,0,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,0), "Purchases"= c(0,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,0,0,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,0))
+
+fallnullconsistent <- data.frame("Week"=1:16, "Transactions"= c(0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0), "Purchases"= c(0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0))
+
+ggplot(sprnullconsistent) + geom_bar(aes(x=Week, y=Transactions), stat='identity')
+ggplot(fallnullconsistent) + geom_bar(aes(x=Week, y=Transactions), stat='identity')
+ggplot(sprnullconsistent) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
+ggplot(fallnullconsistent) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
 
 ```
 
