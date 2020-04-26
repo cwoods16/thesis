@@ -51,7 +51,14 @@ ggplot(fallpurch) + geom_bar(aes(x=Week, y=TotalPurch), stat='identity')
 ```{r}
 #Amount Spent Per Transaction
 springppt <- springtrans %>% group_by(Week) %>% summarize(TotalTrans = sum(as.double(Week)), TotalPurch = sum(AmountSpent)) %>% mutate(PPT = TotalPurch/TotalTrans)
+#springppt <- springtrans %>% group_by(Week) %>% mutate(TotalTrans = count(Week)) %>% summarize(TotalPurch = sum(AmountSpent)) %>% mutate(PPT = TotalPurch/TotalTrans)
+
+
+
 fallppt <- falltrans %>% group_by(Week) %>% summarize(TotalTrans = sum(as.double(Week)), TotalPurch = sum(AmountSpent)) %>% mutate(PPT = TotalPurch/TotalTrans)
+
+springppt
+fallppt
 
 ggplot(springppt) + geom_bar(aes(x=Week, y=PPT), stat='identity')
 ggplot(fallppt) + geom_bar(aes(x=Week, y=PPT), stat='identity')
