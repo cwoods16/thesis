@@ -98,10 +98,13 @@ fallnullweighted <- data.frame("Week"=1:16,
 "Transactions"= c(0,p1falltrans/4,p1falltrans/4,p1falltrans/4,p1falltrans/4,p2falltrans/4,p2falltrans/4,0,p2falltrans/4,p2falltrans/4,p3falltrans/4,p3falltrans/4,0,p3falltrans/4,p3falltrans/4,0), 
 "Purchases"= c(0,p1fallpurch/4,p1fallpurch/4,p1fallpurch/4,p1fallpurch/4,p2fallpurch/4,p2fallpurch/4,0,p2fallpurch/4,p2fallpurch/4,p3fallpurch/4,p3fallpurch/4,0,p3fallpurch/4,p3fallpurch/4,0))
 
-ggplot(sprnullweighted) + geom_bar(aes(x=Week, y=Transactions), stat='identity')
+#ggplot(sprnullweighted) + geom_bar(aes(x=Week, y=Transactions), stat='identity')
 ggplot(fallnullweighted) + geom_bar(aes(x=Week, y=Transactions), stat='identity')
-ggplot(sprnullweighted) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
+#ggplot(sprnullweighted) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
 ggplot(fallnullweighted) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
+
+sum(fallnullweighted$Purchases)
+sum(fallnullweighted$Transactions)
 
 ```
 
