@@ -111,3 +111,10 @@ ggplot(fallnullweighted) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
 
 ```
 
+Chi Squared Models
+```{r}
+#Two Nulls Against One Another
+
+
+```
+
