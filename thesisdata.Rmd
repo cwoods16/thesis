@@ -64,13 +64,16 @@ ggplot(fallppt) + geom_bar(aes(x=Week, y=PPT), stat='identity')
 ```{r}
 #Creation of consistent null dataframes
 
-#sprnullconsistent <- data.frame("Week"=1:17, "Transactions"= c(0,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,0,0,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,0), "Purchases"= c(0,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,0,0,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,0))
+sprnullconsistent <- data.frame("Week"=1:17, "Transactions"= c(0,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,0,0,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,sum(springppt$TotalTrans)/13,0), "Purchases"= c(0,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,0,0,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,sum(springppt$TotalPurch)/13,0))
 
-sprnullconsistent <- data.frame("Week"=1:17, "Probability"=c(0,1/13,1/13,1/13,1/13,1/13,1/13,1/13,0,0,1/13,1/13,1/13,1/13,1/13,1/13,0))
+sprnullconsistentprob <- data.frame("Week"=1:17, "Probability"=c(0,1/13,1/13,1/13,1/13,1/13,1/13,1/13,0,0,1/13,1/13,1/13,1/13,1/13,1/13,0))
 
-#fallnullconsistent <- data.frame("Week"=1:16, "Transactions"= c(0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0), "Purchases"= c(0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0))
+fallnullconsistent <- data.frame("Week"=1:16, "Transactions"= c(0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0,sum(fallppt$TotalTrans)/12,sum(fallppt$TotalTrans)/12,0), "Purchases"= c(0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0,sum(fallppt$TotalPurch)/12,sum(fallppt$TotalPurch)/12,0))
 
-fallnullconsistent <- data.frame("Week"=1:16, "Probability"=c(0,1/12,1/12,1/12,1/12,1/12,1/12,0,1/12,1/12,1/12,1/12,0,1/12,1/12,0))
+fallnullconsistentprob <- data.frame("Week"=1:16, "Probability"=c(0,1/12,1/12,1/12,1/12,1/12,1/12,0,1/12,1/12,1/12,1/12,0,1/12,1/12,0))
+
+ggplot(sprnullconsistent) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
+ggplot(fallnullconsistent) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
 
 ```
 
@@ -114,40 +117,41 @@ fallnullweighted <- data.frame("Week"=1:16, "Transactions"= c(0,p1falltrans/4,p1
 
 fallnullweightedprob <- data.frame("Week"=1:16, "Probability"= c(0,p1fallprob/4,p1fallprob/4,p1fallprob/4,p1fallprob/4,p2fallprob/4,p2fallprob/4,0,p2fallprob/4,p2fallprob/4,p3fallprob/4,p3fallprob/4,0,p3fallprob/4,p3fallprob/4,0))
 
+ggplot(sprnullweighted) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
+ggplot(fallnullweighted) + geom_bar(aes(x=Week, y=Purchases), stat='identity')
+
 ```
 
 Chi Squared Models
 ```{r}
 #Two Nulls Against One Another
-sprnullweighted
-fallnullweighted
-chisq.test(sprnullweighted$Transactions, sprnullconsistent$Probability)
-chisq.test(sprnullweighted$Purchases, sprnullconsistent$Probability)
-chisq.test(fallnullweighted$Transactions, fallnullconsistent$Probability)
-chisq.test(fallnullweighted$Purchases, fallnullconsistent$Probability)
+chisq.test(sprnullweighted$Transactions, sprnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(sprnullweighted$Purchases, sprnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(fallnullweighted$Transactions, fallnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(fallnullweighted$Purchases, fallnullconsistentprob$Probability, simulate.p.value = TRUE)
 
 ```
 
 ```{r}
 #Spring Transactions Chi Squared
-chisq.test(springtransactions$Transactions, sprnullconsistent$Probability)
-chisq.test(springtransactions$Transactions, sprnullweightedprob$Probability)
+chisq.test(springtransactions$Transactions, sprnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(springtransactions$Transactions, sprnullweightedprob$Probability, simulate.p.value = TRUE)
 ```
 
 ```{r}
 #Spring Purchases Chi Squared
-chisq.test(springpurchases$TotalPurch, sprnullconsistent$Probability)
-chisq.test(springpurchases$TotalPurch, sprnullweightedprob$Probability)
+chisq.test(springpurchases$TotalPurch, sprnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(springpurchases$TotalPurch, sprnullweightedprob$Probability, simulate.p.value = TRUE)
 ```
 
 ```{r}
 #Fall Transactions Chi Squared
-chisq.test(falltransactions$Transactions, fallnullconsistent$Probability)
-chisq.test(falltransactions$Transactions, fallnullweightedprob$Probability)
+chisq.test(falltransactions$Transactions, fallnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(falltransactions$Transactions, fallnullweightedprob$Probability, simulate.p.value = TRUE)
 ```
 
 ```{r}
 #Fall Purchases Chi Squared
-chisq.test(fallpurchases$TotalPurch, fallnullconsistent$Probability)
-chisq.test(fallpurchases$TotalPurch, fallnullweightedprob$Probability)
+chisq.test(fallpurchases$TotalPurch, fallnullconsistentprob$Probability, simulate.p.value = TRUE)
+chisq.test(fallpurchases$TotalPurch, fallnullweightedprob$Probability, simulate.p.value = TRUE)
 ```
