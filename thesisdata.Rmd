@@ -36,10 +36,10 @@ theme_update(plot.title = element_text(hjust = 0.5))
 
 #Transactions by week
 springtrans <- flex_data %>% filter(Time <= '2019-5-19') %>% mutate(Week = Week-3) %>% filter(Week!=1 & Week!=9 & Week!=10 & Week!=17)
-falltrans <- flex_data %>% filter(Time >= '2019-9-1') %>% mutate (Week = Week-35) %>% filter(Week!=1 & Week!=8 & Week!=13 & Week!=16)
+falltrans <- flex_data %>% filter(Time >= '2019-9-1') %>% mutate (Week = Week-35) %>% filter(Week!=1 & Week!=8 & Week!=13 & Week!=16) 
 
-springtransactions <- springtrans %>% group_by(Week) %>% summarize(Transactions = n()) %>% rbind(c(1,0), c(9,0), c(10,0), c(17,0)) %>% arrange(Week) 
-falltransactions <- falltrans %>% group_by(Week) %>% summarize(Transactions = n()) %>% rbind(c(1, 0), c(8,0), c(13,0), c(16,0)) %>% arrange(Week)
+springtransactions <- springtrans %>% group_by(Week) %>% summarize(Transactions = n()) %>% rbind(c(1,0), c(9,0), c(10,0), c(17,0)) %>% arrange(Week) %>% mutate(ProbWeight = Transactions/sum(Transactions))
+falltransactions <- falltrans %>% group_by(Week) %>% summarize(Transactions = n()) %>% rbind(c(1, 0), c(8,0), c(13,0), c(16,0)) %>% arrange(Week) %>% mutate(ProbWeight = Transactions/sum(Transactions))
 
 ggplot(springtransactions) + geom_bar(aes(x=Week, y=Transactions), stat='identity', fill = "navy", color = "black") + ggtitle("Spring Transactions") + scale_x_continuous(breaks = 1:17)
 ggplot(falltransactions) + geom_bar(aes(x=Week, y=Transactions), stat='identity', fill = "steelblue", color = "black") + ggtitle("Fall Transactions") + scale_x_continuous(breaks = 1:16)
@@ -48,8 +48,8 @@ ggplot(falltransactions) + geom_bar(aes(x=Week, y=Transactions), stat='identity'
 
 ```{r}
 #Purchases by week
-springpurchases <- springtrans %>% group_by(Week) %>% summarize(TotalPurch = sum(AmountSpent)) %>% rbind(c(1,0), c(9,0), c(10,0), c(17,0)) %>% arrange(Week) 
-fallpurchases <- falltrans %>% group_by(Week) %>% summarize(TotalPurch = sum(AmountSpent)) %>% rbind(c(1, 0), c(8,0), c(13,0), c(16,0)) %>% arrange(Week)
+springpurchases <- springtrans %>% group_by(Week) %>% summarize(TotalPurch = sum(AmountSpent)) %>% rbind(c(1,0), c(9,0), c(10,0), c(17,0)) %>% arrange(Week) %>% mutate(ProbWeight = TotalPurch/sum(TotalPurch))
+fallpurchases <- falltrans %>% group_by(Week) %>% summarize(TotalPurch = sum(AmountSpent)) %>% rbind(c(1, 0), c(8,0), c(13,0), c(16,0)) %>% arrange(Week) %>% mutate(ProbWeight = TotalPurch/sum(TotalPurch))
 
 ggplot(springpurchases) + geom_bar(aes(x=Week, y=TotalPurch), stat='identity', fill = "navy", color = "black") + ggtitle("Spring Expenditures") + scale_x_continuous(breaks = 1:17) + ylab("Expenditures ($)")
 ggplot(fallpurchases) + geom_bar(aes(x=Week, y=TotalPurch), stat='identity', fill = "steelblue", color = "black") + ggtitle("Fall Expenditures") + scale_x_continuous(breaks = 1:16) + ylab("Expenditures ($)")
@@ -156,7 +156,7 @@ fallpurchases <- fallpurchases %>% filter(TotalPurch != 0)
 ```
 
 ```{r}
-#Two Nulls Against One Another
+#Two Nulls Against Each Other
 chisq.test(sprnullweighted$Transactions, p = sprnullconsistentprob$Probability)
 chisq.test(sprnullweighted$Purchases, p = sprnullconsistentprob$Probability)
 chisq.test(fallnullweighted$Transactions, p = fallnullconsistentprob$Probability)
@@ -167,8 +167,8 @@ chisq.test(fallnullweighted$Purchases, p = fallnullconsistentprob$Probability)
 ```{r}
 #Spring Transactions Chi Squared
 
-chisq.test(springtransactions$Transactions, p = sprnullconsistentprob$Probability, simulate.p.value = FALSE)
-chisq.test(springtransactions$Transactions, p = sprnullweightedprob$Probability, simulate.p.value = FALSE)
+chisq.test(springtransactions$Transactions, p = sprnullconsistentprob$Probability)
+chisq.test(springtransactions$Transactions, p = sprnullweightedprob$Probability)
 ```
 
 ```{r}
@@ -189,3 +189,14 @@ chisq.test(falltransactions$Transactions, p = fallnullweightedprob$Probability)
 chisq.test(fallpurchases$TotalPurch, p = fallnullconsistentprob$Probability)
 chisq.test(fallpurchases$TotalPurch, p = fallnullweightedprob$Probability)
 ```
+
+```{r}
+#Testing the Fall and the Spring semesters against one another
+springtransactions <- springtransactions %>% filter(Week != 16)
+springpurchases <- springpurchases %>% filter(Week != 16)
+#chisq.test(falltransactions$Transactions, p = springtransactions$ProbWeight, rescale.p = TRUE)
+#chisq.test(fallpurchases$TotalPurch, p = springpurchases$ProbWeight, rescale.p = TRUE)
+#chisq.test(springtransactions$Transactions, p = falltransactions$ProbWeight, rescale.p = TRUE)
+#chisq.test(springpurchases$TotalPurch, p = fallpurchases$ProbWeight, rescale.p = TRUE)
+```
+
