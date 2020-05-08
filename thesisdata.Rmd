@@ -1,9 +1,10 @@
 ---
-title: "Mental Accounting in College: Students' use of      Free Money"
+title: "Mental Accounting in College: Students' use of Free Money"
 author: "Connor Woods"
 date: "May 7, 2020"
 output: pdf_document
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE, cache=TRUE, 
